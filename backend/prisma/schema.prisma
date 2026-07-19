@@ -1,0 +1,96 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUPER_ADMIN
+  HR_MANAGER
+  EMPLOYEE
+}
+
+enum EmployeeStatus {
+  ACTIVE
+  INACTIVE
+  ON_LEAVE
+}
+
+model Department {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  name        String     @unique
+  description String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  employees   Employee[]
+
+  @@map("departments")
+}
+
+model Employee {
+  id              String         @id @default(auto()) @map("_id") @db.ObjectId
+  employeeId      String         @unique
+  firstName       String
+  lastName        String
+  email           String         @unique
+  phone           String?
+  departmentId    String?        @db.ObjectId
+  designation     String?
+  salary          Float?
+  joiningDate     DateTime?
+  status          EmployeeStatus @default(ACTIVE)
+  role            Role           @default(EMPLOYEE)
+  managerId       String?        @db.ObjectId
+  profileImageUrl String?
+  isDeleted       Boolean        @default(false)
+  deletedAt       DateTime?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  department    Department? @relation(fields: [departmentId], references: [id])
+  manager       Employee?   @relation("ManagerReports", fields: [managerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  directReports Employee[]  @relation("ManagerReports")
+  user          User?
+  auditLogs     AuditLog[]  @relation("AuditEmployee")
+
+  @@map("employees")
+}
+
+model User {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  email        String    @unique
+  passwordHash String
+  employeeId   String    @unique @db.ObjectId
+  refreshToken String?
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  employee  Employee   @relation(fields: [employeeId], references: [id])
+  auditLogs AuditLog[] @relation("AuditUser")
+
+  @@map("users")
+}
+
+model AuditLog {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String?  @db.ObjectId
+  employeeId String?  @db.ObjectId
+  action     String
+  resource   String
+  resourceId String?
+  details    Json?
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+
+  user     User?     @relation("AuditUser", fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  employee Employee? @relation("AuditEmployee", fields: [employeeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("audit_logs")
+}
