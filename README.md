@@ -4,7 +4,10 @@ A full-stack enterprise-grade Employee Management System built with **React + Ty
 
 ---
 
-## 📸 Screenshots
+## 📸 Screenshots & Demo Walkthrough
+
+### 🎬 Animated Demo Recording (End-to-End)
+![Animated Demo Recording](screenshots/full_feature_demo.webp)
 
 ### Dark Mode Dashboard
 ![Dark Mode Dashboard](screenshots/dark_mode_dashboard.png)
