@@ -4,6 +4,22 @@ A full-stack enterprise-grade Employee Management System built with **React + Ty
 
 ---
 
+## 📸 Screenshots
+
+### Dark Mode Dashboard
+![Dark Mode Dashboard](screenshots/dark_mode_dashboard.png)
+
+### Light Mode Dashboard
+![Light Mode Dashboard](screenshots/light_mode_dashboard.png)
+
+### Employees Directory with CSV Actions (Import & Export)
+![Employees Directory with CSV Actions](screenshots/employees_list_csv_actions.png)
+
+### Employees Directory (Light Mode)
+![Employees Directory Light Mode](screenshots/employees_list_light.png)
+
+---
+
 ## 🚀 Features
 
 | Feature | Details |
